@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whisperlist — Anonymous Feedback & Lists</title>
+<meta name="description" content="Create anonymous feedback forms and shareable lists. Collect honest opinions from your team, friends, or community without revealing who said what.">
+<meta name="keywords" content="anonymous feedback tool, anonymous survey, collect honest feedback, anonymous list sharing">
+<meta property="og:title" content="Whisperlist — Anonymous Feedback & Lists">
+<meta property="og:description" content="Create anonymous feedback forms and shareable lists. Collect honest opinions from your team, friends, or community without revealing who said what.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://whisperlist.io">
+<link rel="canonical" href="https://whisperlist.io">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-card: #111111;
+  --bg-surface: #161616;
+  --text: #e8e8e8;
+  --text-secondary: #888888;
+  --text-muted: #555555;
+  --accent: var(--site-accent, #2563eb);
+  --accent-light: var(--site-accent-light, #1a3a5c);
+  --accent-dark: var(--site-accent-dark, #1e40af);
+  --border: #222222;
+  --border-accent: #333333;
+  --max-w: 960px;
+  --nav-h: 56px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; transition: color 0.15s ease; }
+a:hover { color: var(--text); }
+
+.nav-logo-icon { display: none; }
+
+/* ---- NAV ---- */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color 0.15s ease;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+/* ---- HERO ---- */
+.hero {
+  padding-top: calc(var(--nav-h) + 6rem);
+  padding-bottom: 6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.hero-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  max-width: 700px;
+}
+
+.hero-sub {
+  margin-top: 1.25rem;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+.hero-cta {
+  margin-top: 2.5rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover { background: var(--accent-dark); color: #fff; }
+
+/* ---- CONTENT ---- */
+.content {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 1.5rem 6rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  color: var(--text);
+}
+
+/* ---- TOOL SECTION ---- */
+.tool-section {
+  padding-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.tool-header {
+  margin-bottom: 2rem;
+}
+
+.tool-area {
+  border: 1px solid var(--border-accent);
+  background: var(--bg-card);
+  border-radius: 0;
+}
+
+.tool-container {
+  padding: 2.5rem;
+  min-height: 320px;
+}
+
+.tool-container h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.tool-container label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  margin-top: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tool-container label:first-of-type {
+  margin-top: 0;
+}
+
+.tool-container input[type="text"],
+.tool-container input[type="number"],
+.tool-container input[type="email"],
+.tool-container select,
+.tool-container textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border-accent);
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.15s ease;
+}
+
+.tool-container input:focus,
+.tool-container select:focus,
+.tool-container textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.tool-container button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.75rem;
+  border-radius: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: background 0.15s ease;
+}
+
+.tool-container button:hover {
+  background: var(--accent-dark);
+}
+
+.tool-result {
+  margin-top: 1.75rem;
+  padding: 1.5rem;
+  background: var(--bg-surface);
+  border-left: 3px solid var(--accent);
+  border-radius: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.tool-result strong {
+  font-weight: 700;
+}
+
+.tool-row {
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+}
+
+.tool-row > div {
+  flex: 1;
+}
+
+/* ---- FEATURES ---- */
+.features-section {
+  padding-top: 5rem;
+  margin-bottom: 5rem;
+  border-top: 1px solid var(--border);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.feature-card {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: 0;
+  counter-increment: feature;
+  position: relative;
+}
+
+.feature-icon {
+  display: none;
+}
+
+.feature-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.feature-num::before {
+  content: counter(feature, decimal-leading-zero);
+}
+
+.feature-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.feature-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ---- ABOUT ---- */
+.about {
+  padding-top: 5rem;
+  margin-bottom: 5rem;
+  border-top: 1px solid var(--border);
+}
+
+.about-content {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 640px;
+}
+
+.about-content h3 {
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 2rem 0 0.75rem;
+}
+
+.about-content h3:first-child {
+  margin-top: 0;
+}
+
+.about-content p {
+  margin-bottom: 1rem;
+}
+
+/* ---- FAQ ---- */
+.faq {
+  padding-top: 5rem;
+  margin-bottom: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-q {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+  letter-spacing: -0.01em;
+  transition: color 0.15s ease;
+}
+
+.faq-q:hover { color: var(--accent); }
+
+.faq-q::after {
+  content: '+';
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.faq-q.open::after { content: '\2212'; color: var(--accent); }
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.faq-a.open {
+  max-height: 500px;
+  padding-bottom: 1.25rem;
+}
+
+.faq-a p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ---- FOOTER ---- */
+.footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.footer-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.footer-disc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+.footer-heading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-links a {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.footer-links a:hover { color: var(--text); }
+
+.footer-bottom {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-bottom p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 640px) {
+  .hero {
+    padding-top: calc(var(--nav-h) + 3.5rem);
+    padding-bottom: 3.5rem;
+  }
+
+  .nav-links { display: none; }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-row {
+    flex-direction: column;
+  }
+
+  .tool-container {
+    padding: 1.5rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+  }
+
+  .tool-section,
+  .features-section,
+  .about,
+  .faq {
+    padding-top: 3rem;
+    margin-bottom: 3rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><span class="nav-logo-icon" aria-hidden="true">🤫</span>Whisperlist</a>
+    <div class="nav-links">
+      <a href="#tool">Tool</a>
+      <a href="#features">Features</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="hero-label">Whisperlist</p>
+    <h1 class="hero-title">Honest feedback, no names attached</h1>
+    <p class="hero-sub">Create anonymous feedback forms in seconds. Share a link, collect candid responses. No accounts, no tracking, no BS.</p>
+    <div class="hero-cta">
+      <a href="#tool" class="btn-primary">Get started</a>
+    </div>
+  </div>
+</header>
+
+<main class="content">
+
+  <section class="tool-section" id="tool">
+    <div class="tool-header">
+      <h2 class="section-title">Whisperlist</h2>
+    </div>
+    <div class="tool-area" id="tool-area">
+      <div class="tool-container" id="tool-container"></div>
+    </div>
+  </section>
+
+  <section class="features-section" id="features">
+    <h2 class="section-title">What you can do</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+  <div class="feature-icon">👥</div>
+  <div class="feature-name">Team retrospectives</div>
+  <div class="feature-desc">Run honest retros where everyone can flag issues without fear of judgment.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">📦</div>
+  <div class="feature-name">Product feedback</div>
+  <div class="feature-desc">Collect unfiltered user feedback on features, bugs, and priorities.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">🎤</div>
+  <div class="feature-name">Event surveys</div>
+  <div class="feature-desc">Get real feedback after events, talks, or workshops.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">🗳️</div>
+  <div class="feature-name">Decision polls</div>
+  <div class="feature-desc">Run anonymous polls for group decisions — restaurant picks, gift ideas, anything.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">📊</div>
+  <div class="feature-name">Management reviews</div>
+  <div class="feature-desc">Enable upward feedback where reports can be candid about leadership.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">💡</div>
+  <div class="feature-name">Idea collection</div>
+  <div class="feature-desc">Gather ideas from your team without anchoring bias from who suggested what.</div>
+</div>
+
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <h2 class="section-title">Why anonymous feedback matters</h2>
+    <div class="about-content"><h3>People are more honest when they're anonymous</h3><p>Research consistently shows that people give more candid, useful feedback when their identity is protected. Whisperlist removes the social pressure so you get the truth — not what people think you want to hear.</p><h3>Use cases</h3><p>Team retrospectives where people can flag real issues. Product feedback from beta users. Honest friend polls for decisions. Event feedback without awkwardness. Management reviews where reports can speak freely.</p><h3>Privacy by design</h3><p>We don't track IP addresses, don't require accounts, and don't store identifying information. Responses are stored temporarily and auto-deleted after 30 days. Your whispers stay anonymous.</p></div>
+  </section>
+
+  <section class="faq" id="faq">
+    <h2 class="section-title">Frequently asked questions</h2>
+    <div class="faq-list" id="faq-list"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo"><span class="nav-logo-icon" aria-hidden="true">🤫</span>Whisperlist</span>
+      <p class="footer-disc">Whisperlist.io is a free anonymous feedback tool. Responses are stored client-side in this demo version.</p>
+    </div>
+    <div class="footer-links">
+      <p class="footer-heading">Resources</p>
+      <a href="https://sepehr.ai" target="_blank" rel="noopener">sepehr.ai</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Whisperlist. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+const SITE_CONFIG = {"faqs":[{"q":"Is it really anonymous?","a":"Yes. In this demo, all data stays in your browser (localStorage). There's no server, no IP logging, no cookies, no analytics. In a full version, responses would be stored on a server with no identifying metadata."},{"q":"How long are responses stored?","a":"In this demo, responses are stored in your browser's localStorage until you clear them. In a production version, responses would auto-delete after 30 days."},{"q":"Can I export the responses?","a":"You can copy all responses from the results view. A production version would support CSV export."},{"q":"Is there a response limit?","a":"No limit in this demo. Share your link and collect as many responses as you need."},{"q":"Can people respond more than once?","a":"This demo doesn't restrict multiple submissions since we don't track users. A production version could optionally limit to one response per browser session."}],"accentColor":"#7c3aed","accentLight":"#ede9fe","accentDark":"#6d28d9","ctaText":""};
+document.addEventListener('DOMContentLoaded', () => {
+  // Set accent colors from config
+  if (SITE_CONFIG.accentColor) {
+    document.documentElement.style.setProperty('--site-accent', SITE_CONFIG.accentColor);
+    document.documentElement.style.setProperty('--site-accent-light', SITE_CONFIG.accentLight || SITE_CONFIG.accentColor + '22');
+    document.documentElement.style.setProperty('--site-accent-dark', SITE_CONFIG.accentDark || SITE_CONFIG.accentColor);
+  }
+
+  // FAQ accordion
+  const faqList = document.getElementById('faq-list');
+  if (SITE_CONFIG.faqs) {
+    SITE_CONFIG.faqs.forEach(faq => {
+      const item = document.createElement('div');
+      item.className = 'faq-item';
+      item.innerHTML = `
+        <button class="faq-q">${faq.q}</button>
+        <div class="faq-a"><p>${faq.a}</p></div>
+      `;
+      const btn = item.querySelector('.faq-q');
+      const answer = item.querySelector('.faq-a');
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('open');
+        answer.classList.toggle('open');
+      });
+      faqList.appendChild(item);
+    });
+  }
+
+  // Feature card numbering
+  document.querySelectorAll('.feature-card').forEach(card => {
+    const numEl = document.createElement('div');
+    numEl.className = 'feature-num';
+    card.insertBefore(numEl, card.firstChild);
+  });
+
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const current = window.scrollY;
+    if (current > 60) {
+      nav.style.borderBottomColor = '#333';
+    } else {
+      nav.style.borderBottomColor = '';
+    }
+    lastScroll = current;
+  }, { passive: true });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Init tool if available
+  if (typeof initTool === 'function') {
+    initTool(document.getElementById('tool-container'));
+  }
+});
+
+function initTool(container) {
+  const stored = JSON.parse(localStorage.getItem('whisperlist_lists') || '{}');
+
+  function renderCreate() {
+    container.innerHTML = `
+      <h3>Create a whisperlist</h3>
+      <label for="wl-title">What do you want feedback on?</label>
+      <input type="text" id="wl-title" placeholder="e.g., How was the team offsite?">
+      <label for="wl-prompt">Prompt (what should people respond to?)</label>
+      <textarea id="wl-prompt" rows="3" placeholder="e.g., Share one thing that went well and one thing to improve"></textarea>
+      <button id="wl-create">Create whisperlist</button>
+      ${Object.keys(stored).length > 0 ? '<button id="wl-view-all" style="background:transparent;color:var(--accent);border:1px solid var(--border);margin-left:8px">View my lists</button>' : ''}
+    `;
+
+    document.getElementById('wl-create').addEventListener('click', () => {
+      const title = document.getElementById('wl-title').value.trim();
+      const prompt = document.getElementById('wl-prompt').value.trim();
+      if (!title) return;
+      const id = Math.random().toString(36).substring(2, 8);
+      stored[id] = { title, prompt, responses: [], created: new Date().toISOString() };
+      localStorage.setItem('whisperlist_lists', JSON.stringify(stored));
+      renderShare(id);
+    });
+
+    const viewAll = document.getElementById('wl-view-all');
+    if (viewAll) viewAll.addEventListener('click', renderListAll);
+  }
+
+  function renderShare(id) {
+    const list = stored[id];
+    const link = window.location.origin + '#respond-' + id;
+    container.innerHTML = `
+      <h3>Your whisperlist is ready</h3>
+      <div class="tool-result">
+        <strong>${list.title}</strong><br>
+        <p style="margin:0.5rem 0;font-size:0.9rem;color:var(--text-secondary)">${list.prompt}</p>
+        <label>Share this link to collect anonymous responses:</label>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <input type="text" id="wl-link" value="${link}" readonly style="flex:1">
+          <button id="wl-copy" style="margin-top:0;white-space:nowrap">Copy</button>
+        </div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:8px">${list.responses.length} response${list.responses.length !== 1 ? 's' : ''} so far</p>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:0">
+        <button id="wl-results">View responses</button>
+        <button id="wl-new" style="background:transparent;color:var(--accent);border:1px solid var(--border)">Create another</button>
+      </div>
+    `;
+    document.getElementById('wl-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(link).catch(() => {
+        document.getElementById('wl-link').select();
+      });
+      document.getElementById('wl-copy').textContent = 'Copied';
+    });
+    document.getElementById('wl-results').addEventListener('click', () => renderResults(id));
+    document.getElementById('wl-new').addEventListener('click', renderCreate);
+  }
+
+  function renderResults(id) {
+    const list = stored[id];
+    const responses = list.responses.length > 0
+      ? list.responses.map((r, i) => `<div style="padding:0.75rem;background:var(--bg);border-radius:8px;margin-bottom:8px"><span style="font-size:0.75rem;color:var(--text-muted)">#${i + 1}</span><p style="margin:4px 0 0;font-size:0.9rem">${r.text}</p></div>`).join('')
+      : '<p style="color:var(--text-muted);font-size:0.9rem">No responses yet. Share the link to start collecting feedback.</p>';
+
+    container.innerHTML = `
+      <h3>${list.title}</h3>
+      <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1rem">${list.responses.length} response${list.responses.length !== 1 ? 's' : ''}</p>
+      <div>${responses}</div>
+      <div style="display:flex;gap:8px">
+        <button id="wl-back-share">Share link</button>
+        <button id="wl-new2" style="background:transparent;color:var(--accent);border:1px solid var(--border)">Create new</button>
+      </div>
+    `;
+    document.getElementById('wl-back-share').addEventListener('click', () => renderShare(id));
+    document.getElementById('wl-new2').addEventListener('click', renderCreate);
+  }
+
+  function renderRespond(id) {
+    const list = stored[id];
+    if (!list) {
+      container.innerHTML = '<div class="tool-result">This whisperlist was not found or has expired.</div>';
+      return;
+    }
+    container.innerHTML = `
+      <h3>${list.title}</h3>
+      <p style="color:var(--text-secondary);margin-bottom:1rem;font-size:0.95rem">${list.prompt}</p>
+      <label for="wl-response">Your anonymous response</label>
+      <textarea id="wl-response" rows="4" placeholder="Type your response here... it's completely anonymous"></textarea>
+      <button id="wl-submit">Submit anonymously</button>
+    `;
+    document.getElementById('wl-submit').addEventListener('click', () => {
+      const text = document.getElementById('wl-response').value.trim();
+      if (!text) return;
+      list.responses.push({ text, ts: new Date().toISOString() });
+      localStorage.setItem('whisperlist_lists', JSON.stringify(stored));
+      container.innerHTML = `
+        <div class="tool-result">
+          <strong>Response submitted anonymously</strong><br>
+          <p style="margin-top:8px;font-size:0.9rem">Your feedback has been recorded. No one will know it was you.</p>
+        </div>
+        <button id="wl-another">Submit another response</button>
+      `;
+      document.getElementById('wl-another').addEventListener('click', () => renderRespond(id));
+    });
+  }
+
+  function renderListAll() {
+    const ids = Object.keys(stored);
+    const items = ids.map(id => {
+      const l = stored[id];
+      return `<div style="padding:0.75rem;background:var(--bg);border-radius:8px;margin-bottom:8px;cursor:pointer" data-id="${id}">
+        <strong>${l.title}</strong>
+        <span style="font-size:0.8rem;color:var(--text-muted);margin-left:8px">${l.responses.length} responses</span>
+      </div>`;
+    }).join('');
+
+    container.innerHTML = `
+      <h3>Your whisperlists</h3>
+      <div id="wl-list">${items}</div>
+      <button id="wl-new3" style="background:transparent;color:var(--accent);border:1px solid var(--border)">Create new</button>
+    `;
+    document.querySelectorAll('[data-id]').forEach(el => {
+      el.addEventListener('click', () => renderShare(el.dataset.id));
+    });
+    document.getElementById('wl-new3').addEventListener('click', renderCreate);
+  }
+
+  const hash = window.location.hash;
+  if (hash.startsWith('#respond-')) {
+    renderRespond(hash.replace('#respond-', ''));
+  } else {
+    renderCreate();
+  }
+}
+
+</script>
+</body>
+</html>
